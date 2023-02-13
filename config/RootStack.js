@@ -11,28 +11,36 @@ import SeedDetails from '../screens/SeedDetails';
 import {View} from 'react-native';
 import Header from '../components/Header';
 import PlantCareDetails from '../screens/PlantCareDetails';
+import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 
 export default function RootStack({navigation}) {
+  const authInfo = useSelector(state => state.auth);
   return (
     <>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Splash"
-          options={{headerShown: false}}
-          component={SplashScreen}
-        />
-        <Stack.Screen
-          name="Login"
-          options={{headerShown: false}}
-          component={Login}
-        />
-        <Stack.Screen
-          name="Signup"
-          options={{headerShown: false}}
-          component={SignUp}
-        />
+        {!authInfo.user ? (
+          <Stack.Screen
+            name="Splash"
+            options={{headerShown: false}}
+            component={SplashScreen}
+          />
+        ) : null}
+        {!authInfo.user ? (
+          <Stack.Screen
+            name="Login"
+            options={{headerShown: false}}
+            component={Login}
+          />
+        ) : null}
+        {!authInfo.user ? (
+          <Stack.Screen
+            name="Signup"
+            options={{headerShown: false}}
+            component={SignUp}
+          />
+        ) : null}
         <Stack.Screen
           name="Home Screen"
           options={{

@@ -8,7 +8,6 @@ import Indoor from './Indoor';
 import Seeds from './Seeds';
 import PlantCare from './PlantCare';
 import Outdoor from './Outdoor';
-import Header from '../components/Header';
 
 const renderTabBar = props => (
   <TabBar
@@ -71,7 +70,6 @@ export default function Home({navigation}) {
     <>
       <View
         style={{
-          paddingTop: 20,
           backgroundColor: 'white',
           paddingHorizontal: 20,
         }}>
@@ -80,7 +78,7 @@ export default function Home({navigation}) {
             height: 200,
             width: 345,
             borderRadius: 20,
-            marginVertical: 20,
+            marginVertical: 10,
             position: 'relative',
           }}
           source={require('../assets/homeBackground.png')}
@@ -89,7 +87,7 @@ export default function Home({navigation}) {
         <View
           style={{
             position: 'absolute',
-            top: 80,
+            top: 60,
             left: 40,
             width: 160,
           }}>

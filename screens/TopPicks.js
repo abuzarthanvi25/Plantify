@@ -11,19 +11,20 @@ import {
 import {useDispatch} from 'react-redux';
 import CardComponent from '../components/CardComponent';
 import CONSTANT from '../Constants.config';
+import CONSTANT2 from '../config/constants.config';
 import {add} from '../store/cartSlice';
 import {addFavourite} from '../store/favouriteProdSlice';
+import {showToast} from '../methods/methods';
+import Toast from 'react-native-toast-message';
 
 export default function TopPicks({navigation}) {
   const [plants, setPlants] = useState([]);
   const [refresh, setRefresh] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
-
   const getPlants = () => {
     axios
-      .get(`${CONSTANT.PROJECT_URL}/api/plants`)
+      .get(`${CONSTANT2.PROJECT_URL}/api/plants`)
       .then(res => {
-        console.log(res.data);
         setErrorMessage(null);
         setPlants(res.data.plants);
       })
@@ -43,7 +44,7 @@ export default function TopPicks({navigation}) {
     getPlants();
     setTimeout(() => {
       setRefresh(false);
-      ToastAndroid.show('Refreshed Successfully', 1500);
+      showToast('REFRESHED SUCCESSFULLY', 'success');
     }, 1500);
   };
 
@@ -57,6 +58,14 @@ export default function TopPicks({navigation}) {
         />
       }
       style={{backgroundColor: '#fff', marginBottom: 50}}>
+      <View style={{zIndex: 999}}>
+        <Toast
+          topOffset={true}
+          position="top"
+          autoHide={true}
+          visibilityTime={800}
+        />
+      </View>
       {plants && plants.length > 0 ? (
         <View style={{marginHorizontal: 30, marginTop: 10}}>
           <Text
@@ -78,8 +87,14 @@ export default function TopPicks({navigation}) {
             price={plant.price}
             imageUrl={plant.image}
             onPress={() => navigation.navigate('Plant Detail Screen', plant)}
-            cartAction={() => dispatch(add(plant))}
-            onPressFavourite={() => dispatch(addFavourite(plant))}
+            cartAction={() => {
+              dispatch(add(plant));
+              ToastAndroid.show('ADDED TO CART', ToastAndroid.SHORT);
+            }}
+            onPressFavourite={() => {
+              dispatch(addFavourite(plant));
+              ToastAndroid.show('ADDED TO FAVOURITES', ToastAndroid.SHORT);
+            }}
             bgColor={
               i % 2 === 0 ? '#9CE5CB' : i % 3 === 0 ? '#DEEC8A' : '#B2E28D'
             }

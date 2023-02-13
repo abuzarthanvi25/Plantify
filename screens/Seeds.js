@@ -11,8 +11,11 @@ import {
 import {useDispatch} from 'react-redux';
 import CardComponent from '../components/CardComponent';
 import CONSTANT from '../Constants.config';
+import CONSTANT2 from '../config/constants.config';
 import {add} from '../store/cartSlice';
 import {addFavourite} from '../store/favouriteProdSlice';
+import {showToast} from '../methods/methods';
+import Toast from 'react-native-toast-message';
 
 export default function Seeds({navigation}) {
   const [seeds, setSeeds] = useState([]);
@@ -21,9 +24,8 @@ export default function Seeds({navigation}) {
 
   const getSeeds = () => {
     axios
-      .get(`${CONSTANT.PROJECT_URL}/api/seeds`)
+      .get(`${CONSTANT2.PROJECT_URL}/api/seeds`)
       .then(res => {
-        console.log(res.data);
         setErrorMessage(null);
         setSeeds(res.data.seeds);
       })
@@ -44,7 +46,7 @@ export default function Seeds({navigation}) {
     getSeeds();
     setTimeout(() => {
       setRefresh(false);
-      ToastAndroid.show('Refreshed Successfully', 1500);
+      showToast('REFRESHED SUCCESSFULLY', 'success');
     }, 1500);
   };
 
@@ -58,6 +60,9 @@ export default function Seeds({navigation}) {
         />
       }
       style={{backgroundColor: '#fff', marginBottom: 50}}>
+      <View style={{zIndex: 999}}>
+        <Toast topOffset={true} position="top" autoHide visibilityTime={800} />
+      </View>
       {seeds && seeds.length > 0 ? (
         <View style={{marginHorizontal: 30, marginTop: 10}}>
           <Text
@@ -79,8 +84,14 @@ export default function Seeds({navigation}) {
             price={seed.price}
             imageUrl={seed.image}
             onPress={() => navigation.navigate('Seed Detail Screen', seed)}
-            onPressFavourite={() => dispatch(addFavourite(seed))}
-            cartAction={() => dispatch(add(seed))}
+            onPressFavourite={() => {
+              dispatch(addFavourite(seed));
+              ToastAndroid.show('ADDED TO FAVOURITES', ToastAndroid.SHORT);
+            }}
+            cartAction={() => {
+              dispatch(add(seed));
+              ToastAndroid.show('ADDED TO CART', ToastAndroid.SHORT);
+            }}
           />
         ))
       ) : errorMessage ? (

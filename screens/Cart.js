@@ -4,6 +4,7 @@ import {
   ScrollView,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -11,15 +12,20 @@ import {useDispatch, useSelector} from 'react-redux';
 import CONSTANT from '../Constants.config';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Icon2 from 'react-native-vector-icons/MaterialCommunityIcons';
-import {add, remove, removeAllInstance} from '../store/cartSlice';
+import {add, emptyCart, remove, removeAllInstance} from '../store/cartSlice';
 import Checkout from '../components/Checkout';
 import DeliveryComponent from '../components/DeliveryComponent';
+import CONSTANT2 from '../config/constants.config';
+import axios from 'axios';
 
 export default function Cart({navigation}) {
-  const [couponStatus, setCouponStatus] = useState(false);
-  const cartItems = useSelector(state => state.cart);
   const dispatch = useDispatch();
+  const [couponStatus, setCouponStatus] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [error, setError] = useState(false);
+
+  const authInfo = useSelector(state => state.auth);
+  const cartItems = useSelector(state => state.cart);
   const favouriteProducts = useSelector(state => state.favourites);
 
   console.log(favouriteProducts);
@@ -41,6 +47,31 @@ export default function Cart({navigation}) {
           .reduce((partialSum, a) => partialSum + a, 0)
           .toFixed(0),
       );
+    }
+  };
+
+  const handleCheckout = () => {
+    if (authInfo.user) {
+      ToastAndroid.show('Your Order in progress...', 1000);
+      setError('');
+      axios
+        .post(`${CONSTANT2.PROJECT_URL}/api/orders`, {
+          userName: authInfo.user.user_name,
+          userId: authInfo.user._id,
+          cartItems: cartItems,
+          subTotal: parseInt(totalPrice) + parseInt(CONSTANT.DELIVERY_COST),
+        })
+        .then(res => {
+          console.log(res);
+          if (res.data.status) {
+            dispatch(emptyCart());
+            navigation.navigate('Checkout Screen', {
+              ...res.data.order,
+            });
+          } else {
+            setError(res.data.message);
+          }
+        });
     }
   };
 
@@ -319,10 +350,23 @@ export default function Cart({navigation}) {
           <View style={{marginBottom: 50}}>
             <Checkout
               subTotal={parseInt(totalPrice) + parseInt(CONSTANT.DELIVERY_COST)}
-              onCheckout={() => navigation.navigate('Checkout Screen')}
+              onCheckout={handleCheckout}
             />
           </View>
         </>
+      ) : null}
+      {error ? (
+        <View>
+          <Text
+            style={{
+              color: 'red',
+              fontWeight: 'bold',
+              textAlign: 'center',
+              fontSize: 24,
+            }}>
+            {error.toUpperCase()}
+          </Text>
+        </View>
       ) : null}
     </>
   );

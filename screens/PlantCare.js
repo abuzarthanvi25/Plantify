@@ -11,8 +11,11 @@ import {
 import {useDispatch} from 'react-redux';
 import CardComponent from '../components/CardComponent';
 import CONSTANT from '../Constants.config';
+import CONSTANT2 from '../config/constants.config';
 import {add} from '../store/cartSlice';
 import {addFavourite} from '../store/favouriteProdSlice';
+import {showToast} from '../methods/methods';
+import Toast from 'react-native-toast-message';
 
 export default function PlantCare({navigation}) {
   const [tools, setTools] = useState([]);
@@ -21,9 +24,8 @@ export default function PlantCare({navigation}) {
 
   const getTools = () => {
     axios
-      .get(`${CONSTANT.PROJECT_URL}/api/tools`)
+      .get(`${CONSTANT2.PROJECT_URL}/api/tools`)
       .then(res => {
-        console.log(res.data);
         setErrorMessage(null);
         setTools(res.data.tools);
       })
@@ -44,7 +46,7 @@ export default function PlantCare({navigation}) {
     getTools();
     setTimeout(() => {
       setRefresh(false);
-      ToastAndroid.show('Refreshed Successfully', 1500);
+      showToast('REFRESHED SUCCESSFULLY', 'success');
     }, 1500);
   };
 
@@ -58,6 +60,9 @@ export default function PlantCare({navigation}) {
         />
       }
       style={{backgroundColor: '#fff', marginBottom: 50}}>
+      <View style={{zIndex: 999}}>
+        <Toast topOffset={true} position="top" autoHide visibilityTime={800} />
+      </View>
       {tools && tools.length > 0 ? (
         <View style={{marginHorizontal: 30, marginTop: 10}}>
           <Text
@@ -81,8 +86,14 @@ export default function PlantCare({navigation}) {
             onPress={() =>
               navigation.navigate('Plant Care Detail Screen', tool)
             }
-            onPressFavourite={() => dispatch(addFavourite(tool))}
-            cartAction={() => dispatch(add(tool))}
+            onPressFavourite={() => {
+              dispatch(addFavourite(tool));
+              ToastAndroid.show('ADDED TO FAVOURITES', ToastAndroid.SHORT);
+            }}
+            cartAction={() => {
+              dispatch(add(tool));
+              ToastAndroid.show('ADDED TO CART', ToastAndroid.SHORT);
+            }}
           />
         ))
       ) : errorMessage ? (

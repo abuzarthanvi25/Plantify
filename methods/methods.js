@@ -1,5 +1,6 @@
 import axios from 'axios';
 import CONSTANT from '../Constants.config';
+import Toast from 'react-native-toast-message';
 
 export const getLoggedInHeader = Accesstoken => {
   return {
@@ -40,4 +41,11 @@ export const deleteRequest = async (endpoint, body) => {
     body: JSON.stringify(body),
   });
   return await res.json();
+};
+
+export const showToast = (message, variant) => {
+  Toast.show({
+    type: variant ?? 'info',
+    text1: message ?? '',
+  });
 };

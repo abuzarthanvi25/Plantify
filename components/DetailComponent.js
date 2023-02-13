@@ -11,6 +11,7 @@ export default function DetailComponent({
   price,
   size,
   cartAction,
+  onPressFavourite,
 }) {
   return (
     <>
@@ -143,7 +144,9 @@ export default function DetailComponent({
         }}>
         <Icon2 name={'shopping-bag'} size={24} color={'#fff'} />
       </TouchableOpacity>
-      <TouchableOpacity style={{position: 'absolute', top: 330, left: 120}}>
+      <TouchableOpacity
+        onPress={onPressFavourite ?? null}
+        style={{position: 'absolute', top: 330, left: 120}}>
         <View
           style={{
             backgroundColor: category !== 'Air Purifier' ? '#DFDFDF' : 'white',

@@ -1,9 +1,9 @@
 import React, {useEffect} from 'react';
 import {
-  Button,
   Image,
   ScrollView,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -11,9 +11,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useDispatch, useSelector} from 'react-redux';
 import CartStatus from '../components/CartStatus';
 import DetailComponent from '../components/DetailComponent';
-import Header from '../components/Header';
 import CONSTANT from '../Constants.config';
 import {add} from '../store/cartSlice';
+import {addFavourite} from '../store/favouriteProdSlice';
 
 export default function PlantDetails({route, navigation}) {
   useEffect(() => {
@@ -40,7 +40,14 @@ export default function PlantDetails({route, navigation}) {
           imgUrl={image}
           price={price}
           size={size}
-          cartAction={() => dispatch(add(route.params))}
+          cartAction={() => {
+            dispatch(add(route.params));
+            ToastAndroid.show('ADDED TO CART', ToastAndroid.SHORT);
+          }}
+          onPressFavourite={() => {
+            dispatch(addFavourite(route.params));
+            ToastAndroid.show('ADDED TO FAVOURITES', ToastAndroid.SHORT);
+          }}
         />
         <View>
           <Text

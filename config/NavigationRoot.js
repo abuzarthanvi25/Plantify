@@ -5,8 +5,10 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Icon2 from 'react-native-vector-icons/MaterialIcons';
 import {Dimensions, Text} from 'react-native';
 import RootStack from './RootStack';
+import PlantCare from '../screens/PlantCare';
 import CONSTANT from '../Constants.config';
 import CustomDrawerMenu from '../components/CustomDrawerMenu';
+import Profile from '../screens/Profile';
 const Drawer = createDrawerNavigator();
 
 function NavigationRoot() {
@@ -83,11 +85,11 @@ function NavigationRoot() {
                 color={CONSTANT.THEME_TEXT}
               />
             ),
-            headerShown: false,
+            // headerShown: false,
           }}
-          component={RootStack}
+          component={PlantCare}
         />
-        <Drawer.Screen
+        {/* <Drawer.Screen
           name="Community"
           options={{
             drawerLabel: () => (
@@ -109,7 +111,7 @@ function NavigationRoot() {
             headerShown: false,
           }}
           component={RootStack}
-        />
+        /> */}
         <Drawer.Screen
           name="My Account"
           options={{
@@ -133,9 +135,9 @@ function NavigationRoot() {
                 color={CONSTANT.THEME_TEXT}
               />
             ),
-            headerShown: false,
+            // headerShown: false,
           }}
-          component={RootStack}
+          component={Profile}
         />
         <Drawer.Screen
           name="Track Order"

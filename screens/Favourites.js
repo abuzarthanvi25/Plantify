@@ -1,5 +1,5 @@
 import React from 'react';
-import {ScrollView, Text, View} from 'react-native';
+import {ScrollView, Text, ToastAndroid, View} from 'react-native';
 import CardComponent from '../components/CardComponent';
 import CONSTANT from '../Constants.config';
 import {useDispatch, useSelector} from 'react-redux';
@@ -13,7 +13,7 @@ export default function Favourite({navigation}) {
   console.log(favouriteProducts);
 
   return (
-    <ScrollView style={{backgroundColor: '#EFFFF4', marginBottom: 60}}>
+    <ScrollView style={{backgroundColor: '#FFF', marginBottom: 60}}>
       <View style={{marginHorizontal: 30, marginTop: 35}}>
         <Text
           style={{
@@ -26,24 +26,31 @@ export default function Favourite({navigation}) {
       </View>
       {favouriteProducts && favouriteProducts.length > 0 ? (
         [...new Set(favouriteProducts)].map((favProd, i) => (
-          <CardComponent
-            key={i}
-            title={favProd.name}
-            category={favProd.category}
-            cartAction={() => dispatch(add(favProd))}
-            imageUrl={favProd.image}
-            price={favProd.price}
-            onPressFavourite={() => dispatch(removeAllInstance(favProd))}
-            onPress={() => {
-              favProd.category === 'Air Purifier'
-                ? navigation.navigate('Plant Detail Screen', favProd)
-                : favProd.category === 'Seed'
-                ? navigation.navigate('Seed Detail Screen', favProd)
-                : favProd.category === 'Plant Care'
-                ? navigation.navigate('Plant Care Detail Screen', favProd)
-                : null;
-            }}
-          />
+          <View style={{marginVertical: 10}} key={i}>
+            <CardComponent
+              title={favProd.name}
+              category={favProd.category}
+              cartAction={() => dispatch(add(favProd))}
+              imageUrl={favProd.image}
+              price={favProd.price}
+              onPressFavourite={() => {
+                dispatch(removeAllInstance(favProd));
+                ToastAndroid.show(
+                  'REMOVED FROM FAVOURITES',
+                  ToastAndroid.SHORT,
+                );
+              }}
+              onPress={() => {
+                favProd.category === 'Air Purifier'
+                  ? navigation.navigate('Plant Detail Screen', favProd)
+                  : favProd.category === 'Seed'
+                  ? navigation.navigate('Seed Detail Screen', favProd)
+                  : favProd.category === 'Plant Care'
+                  ? navigation.navigate('Plant Care Detail Screen', favProd)
+                  : null;
+              }}
+            />
+          </View>
         ))
       ) : (
         <View

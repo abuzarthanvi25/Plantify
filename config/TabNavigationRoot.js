@@ -3,7 +3,6 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeRoot';
 import Cart from '../screens/Cart';
 import Favourites from '../screens/Favourites';
-import Icon from 'react-native-vector-icons/MaterialIcons';
 import Profile from '../screens/Profile';
 import {Image} from 'react-native';
 

@@ -5,7 +5,7 @@ const authSlice = createSlice({
   initialState: {},
   reducers: {
     addAuthInfo(state, action) {
-      return {...state, ...action.payload};
+      return {...action.payload};
     },
     removeAuthInfo(state) {
       return (state = {});

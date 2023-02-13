@@ -4,6 +4,7 @@ import {
   Image,
   ScrollView,
   Text,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -14,6 +15,7 @@ import CartStatus from '../components/CartStatus';
 import DetailComponent from '../components/DetailComponent';
 import CONSTANT from '../Constants.config';
 import {add} from '../store/cartSlice';
+import {addFavourite} from '../store/favouriteProdSlice';
 
 export default function SeedDetails({route, navigation}) {
   useEffect(() => {
@@ -39,7 +41,14 @@ export default function SeedDetails({route, navigation}) {
           imgUrl={image}
           price={price}
           size={size}
-          cartAction={() => dispatch(add(route.params))}
+          cartAction={() => {
+            dispatch(add(route.params));
+            ToastAndroid.show('ADDED TO CART', ToastAndroid.SHORT);
+          }}
+          onPressFavourite={() => {
+            dispatch(addFavourite(route.params));
+            ToastAndroid.show('ADDED TO FAVOURITES', ToastAndroid.SHORT);
+          }}
         />
         <View>
           <Text

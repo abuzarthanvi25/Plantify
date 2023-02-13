@@ -3,7 +3,9 @@ import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../components/Header';
 import CONSTANT from '../Constants.config';
 
-export default function OrderCheckout({navigation}) {
+export default function OrderCheckout({route, navigation}) {
+  const {_id} = route.params;
+
   return (
     <>
       <ScrollView style={{backgroundColor: '#fff', padding: 25}}>
@@ -17,7 +19,7 @@ export default function OrderCheckout({navigation}) {
             justifyContent: 'center',
             alignItems: 'center',
           }}>
-          <View style={{width: 200}}>
+          <View style={{width: 300}}>
             <Text
               style={{
                 fontSize: 50,
@@ -44,7 +46,7 @@ export default function OrderCheckout({navigation}) {
                 marginVertical: 10,
                 fontWeight: '500',
               }}>
-              Order ID : #293092309
+              Order ID : #{_id ?? '123456789900'}
             </Text>
           </View>
         </View>
@@ -55,6 +57,7 @@ export default function OrderCheckout({navigation}) {
             source={require('../assets/CheckoutLogo.png')}
           />
           <TouchableOpacity
+            onPress={() => navigation.navigate('Home Screen')}
             style={{
               backgroundColor: CONSTANT.THEME_COLOR,
               paddingHorizontal: 125,
